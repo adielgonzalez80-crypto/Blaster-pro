@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Blaster Pro</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121a2b;
+      --line: #243049;
+      --text: #e8eefc;
+      --muted: #93a0b8;
+      --accent: #3b82f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+    }
+    header {
+      padding: 18px 16px 8px;
+    }
+    h1 { margin: 0; font-size: 22px; letter-spacing: .2px; }
+    .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .search {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px 8px;
+      position: sticky;
+      top: 0;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(8px);
+    }
+    input {
+      flex: 1;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: #edf2ff;
+      color: #0b1220;
+      font-size: 16px;
+      outline: none;
+    }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    main { padding: 8px 16px 40px; }
+    .meta { color: var(--muted); font-size: 13px; margin: 8px 0 14px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .card a {
+      color: #8cb4ff;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .card p { margin: 8px 0 0; color: #c9d4ea; font-size: 14px; line-height: 1.45; }
+    .src { margin-top: 8px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .thumb {
+      background: #0e1626;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .thumb img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .thumb span { display: block; padding: 8px; font-size: 12px; color: #d5def0; }
+    .empty { color: var(--muted); padding: 24px 8px; }
+    .err { color: #fecaca; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blaster Pro</h1>
+    <div class="sub">Búsqueda real · Wikipedia + Open Library · sin clave de Brave</div>
+  </header>
+  <div class="search">
+    <input id="q" value="Comics" placeholder="Buscar cómics, libros, temas..." />
+    <button id="go">Buscar</button>
+  </div>
+  <main>
+    <div class="meta" id="meta">Listo.</div>
+    <section id="results"></section>
+  </main>
+  <script>
+    const q = document.getElementById("q");
+    const go = document.getElementById("go");
+    const meta = document.getElementById("meta");
+    const results = document.getElementById("results");
+
+    function card(item) {
+      const title = item.title || "Sin título";
+      const url = item.url || "#";
+      const desc = item.description || "";
+      const src = item.source || "";
+      return `<article class="card">
+        <a href="${url}" target="_blank" rel="noopener">${title}</a>
+        ${desc ? `<p>${desc}</p>` : ""}
+        ${src ? `<div class="src">${src}</div>` : ""}
+      </article>`;
+    }
+
+    async function search() {
+      const query = q.value.trim();
+      if (!query) {
+        meta.textContent = "Escribe una búsqueda.";
+        return;
+      }
+      go.disabled = true;
+      meta.textContent = "Buscando...";
+      results.innerHTML = "";
+      try {
+        const res = await fetch("/api/search?q=" + encodeURIComponent(query));
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Error de búsqueda");
+
+        const web = Array.isArray(data.web) ? data.web : [];
+        const images = Array.isArray(data.images) ? data.images : [];
+        meta.textContent = `Proveedor: ${data.provider || "demo"} · ${web.length} resultados`;
+
+        let html = "";
+        if (web.length) html += web.map(card).join("");
+        else html += `<div class="empty">No hay resultados web.</div>`;
+
+        if (images.length) {
+          html += `<h3>Imágenes</h3><div class="grid">` +
+            images.slice(0, 8).map((img) => `
+              <a class="thumb" href="${img.url}" target="_blank" rel="noopener">
+                <img src="${img.image || img.url}" alt="${img.title || ""}" />
+                <span>${img.title || ""}</span>
+              </a>`).join("") + `</div>`;
+        }
+        results.innerHTML = html;
+      } catch (e) {
+        meta.innerHTML = `<span class="err">${e.message}</span>`;
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    go.addEventListener("click", search);
+    q.addEventListener("keydown", (e) => { if (e.key === "Enter") search(); });
+    search();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "blaster-pro",
+  "version": "5.0.0",
+  "private": true,
+  "description": "Blaster Pro — buscador web y de cómics sin API key de pago",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
