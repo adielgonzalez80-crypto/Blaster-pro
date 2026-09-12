@@ -3,60 +3,103 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Blaster Pro" />
   <title>Blaster Pro</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <style>
     :root { --bg:#0b1220; --card:#121a2b; --line:#243049; --text:#e8eefc; --muted:#93a0b8; --accent:#3b82f6; }
     * { box-sizing: border-box; }
-    body { margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; }
-    header { padding:18px 16px 8px; }
+    body { margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; padding-bottom:72px; }
+    header { padding:14px 16px 6px; display:flex; gap:12px; align-items:center; }
+    header img.logo { width:52px; height:52px; border-radius:14px; object-fit:cover; background:#081018; }
     h1 { margin:0; font-size:22px; }
-    .sub { color:var(--muted); font-size:13px; margin-top:4px; }
-    .search { display:flex; gap:8px; padding:12px 16px; position:sticky; top:0; background:#0b1220f2; }
+    .sub { color:var(--muted); font-size:12px; margin-top:3px; }
+    .search { display:flex; gap:8px; padding:10px 16px; position:sticky; top:0; background:#0b1220f2; z-index:2; }
     input { flex:1; border:0; border-radius:999px; padding:12px 16px; background:#edf2ff; color:#0b1220; font-size:16px; }
     button { border:0; border-radius:999px; padding:12px 18px; background:var(--accent); color:#fff; font-weight:700; }
-    main { padding:8px 16px 40px; }
-    .meta { color:var(--muted); font-size:13px; margin:8px 0 14px; }
+    .install { margin:0 16px 10px; padding:10px 12px; border-radius:12px; background:#18233a; border:1px solid var(--line); display:none; align-items:center; justify-content:space-between; gap:8px; font-size:13px; }
+    main { padding:4px 16px 24px; }
+    .meta { color:var(--muted); font-size:13px; margin:4px 0 12px; }
+    .tabs { display:flex; gap:6px; padding:0 16px 8px; }
+    .tabs button { background:#18233a; color:#d7e2f7; padding:8px 12px; font-size:13px; }
+    .tabs button.on { background:var(--accent); color:#fff; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:12px; }
     .card a { color:#8cb4ff; font-weight:700; text-decoration:none; font-size:16px; }
     .card p { margin:8px 0 0; color:#c9d4ea; font-size:14px; line-height:1.45; }
     .src { margin-top:8px; font-size:11px; color:var(--muted); text-transform:uppercase; }
     .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
     .thumb { background:#0e1626; border:1px solid var(--line); border-radius:12px; overflow:hidden; color:#d5def0; text-decoration:none; }
-    .thumb img { width:100%; height:160px; object-fit:cover; display:block; }
+    .thumb img, .thumb video { width:100%; height:160px; object-fit:cover; display:block; background:#070b14; }
     .thumb span { display:block; padding:8px; font-size:12px; }
     .err { color:#fecaca; }
+    .hidden { display:none; }
+    .nav { position:fixed; left:0; right:0; bottom:0; display:flex; background:#10182a; border-top:1px solid var(--line); padding:6px 8px calc(8px + env(safe-area-inset-bottom)); }
+    .nav button { flex:1; background:transparent; color:var(--muted); padding:8px 4px; font-size:11px; border-radius:10px; }
+    .nav button.on { color:#fff; background:#1a2740; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Blaster Pro</h1>
-    <div class="sub">Gratis · Wikipedia + Open Library · sin Railway ni tarjeta</div>
+    <img class="logo" src="./icon-192.png" alt="Blaster Pro" />
+    <div>
+      <h1>Blaster Pro</h1>
+      <div class="sub">Web · Imágenes · Videos</div>
+    </div>
   </header>
   <div class="search">
-    <input id="q" value="Comics" placeholder="Buscar cómics, libros, temas..." />
+    <input id="q" value="Comics" placeholder="Buscar cómics, imágenes, videos..." />
     <button id="go">Buscar</button>
+  </div>
+  <div class="install" id="installBar">
+    <span>Instálala en el inicio como app</span>
+    <button id="installBtn">Instalar</button>
+  </div>
+  <div class="tabs">
+    <button class="on" data-tab="web">Web</button>
+    <button data-tab="images">Imágenes</button>
+    <button data-tab="videos">Videos</button>
   </div>
   <main>
     <div class="meta" id="meta">Listo.</div>
-    <section id="results"></section>
+    <section id="web"></section>
+    <section id="images" class="hidden"></section>
+    <section id="videos" class="hidden"></section>
   </main>
+  <nav class="nav">
+    <button class="on" data-tab="web">Web</button>
+    <button data-tab="images">Imágenes</button>
+    <button data-tab="videos">Videos</button>
+  </nav>
   <script>
     const q = document.getElementById("q");
     const go = document.getElementById("go");
     const meta = document.getElementById("meta");
-    const results = document.getElementById("results");
+    const panes = { web: document.getElementById("web"), images: document.getElementById("images"), videos: document.getElementById("videos") };
+    let deferredPrompt = null;
 
     function strip(s) {
       return String(s || "")
         .replace(/<[^>]+>/g, " ")
-        .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-        .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+        .replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,"&")
+        .replace(/\[\s*\d+\s*\]/g, " ")
+        .replace(/^[^\wáéíóúñÁÉÍÓÚÑ"]+/g, "")
         .replace(/\s+/g, " ").trim();
     }
 
+    function showTab(name) {
+      Object.entries(panes).forEach(([k, el]) => el.classList.toggle("hidden", k !== name));
+      document.querySelectorAll("[data-tab]").forEach((b) => b.classList.toggle("on", b.dataset.tab === name));
+    }
+    document.querySelectorAll("[data-tab]").forEach((b) => b.onclick = () => showTab(b.dataset.tab));
+
     async function wiki(query, lang) {
       const url = `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=8&format=json&origin=*`;
-      const data = await fetch(url).then((r) => r.json());
+      const data = await fetch(url).then(r => r.json());
       return (data.query?.search || []).map((hit) => ({
         title: hit.title,
         url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(hit.title.replace(/ /g, "_"))}`,
@@ -66,20 +109,36 @@
     }
 
     async function wikiImages(query, lang) {
-      const url = `https://${lang}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=8&prop=pageimages&piprop=thumbnail&pithumbsize=400&format=json&origin=*`;
-      const data = await fetch(url).then((r) => r.json());
-      return Object.values(data.query?.pages || {})
-        .filter((p) => p.thumbnail?.source)
-        .map((p) => ({
-          title: p.title,
-          url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title.replace(/ /g, "_"))}`,
-          image: p.thumbnail.source,
-        }));
+      const url = `https://${lang}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=10&prop=pageimages&piprop=thumbnail&pithumbsize=400&format=json&origin=*`;
+      const data = await fetch(url).then(r => r.json());
+      return Object.values(data.query?.pages || {}).filter(p => p.thumbnail?.source).map((p) => ({
+        title: p.title,
+        url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title.replace(/ /g, "_"))}`,
+        image: p.thumbnail.source,
+      }));
+    }
+
+    async function commonsImages(query) {
+      const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|mime|size&iiurlwidth=400&format=json&origin=*`;
+      const data = await fetch(url).then(r => r.json());
+      return Object.values(data.query?.pages || {}).map((p) => {
+        const info = (p.imageinfo && p.imageinfo[0]) || {};
+        const mime = info.mime || "";
+        const fileUrl = info.thumburl || info.url;
+        if (!fileUrl) return null;
+        const isVideo = mime.startsWith("video") || /\.(webm|ogv|mp4)$/i.test(info.url || "");
+        return {
+          title: (p.title || "").replace(/^File:/, ""),
+          url: info.descriptionurl || info.url || fileUrl,
+          image: isVideo ? (info.thumburl || fileUrl) : fileUrl,
+          video: isVideo ? info.url : "",
+          source: "Wikimedia",
+        };
+      }).filter(Boolean);
     }
 
     async function openLibrary(query) {
-      const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=10`;
-      const data = await fetch(url).then((r) => r.json());
+      const data = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=10`).then(r => r.json());
       return (data.docs || []).map((doc) => ({
         title: doc.title || "Sin título",
         url: doc.key ? "https://openlibrary.org" + doc.key : "#",
@@ -89,45 +148,76 @@
       }));
     }
 
+    async function sepias(query) {
+      const data = await fetch(`https://sepiasearch.org/api/v1/search/videos?search=${encodeURIComponent(query)}&count=12`).then(r => r.json());
+      return (data.data || []).map((v) => ({
+        title: v.name || "Video",
+        url: v.url,
+        image: (v.thumbnailUrl) || "",
+        description: strip(v.description || v.channel?.displayName || ""),
+        source: "PeerTube",
+      }));
+    }
+
     function card(item) {
-      return `<article class="card">
-        <a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>
-        ${item.description ? `<p>${item.description}</p>` : ""}
-        ${item.source ? `<div class="src">${item.source}</div>` : ""}
-      </article>`;
+      return `<article class="card"><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>${item.description ? `<p>${item.description}</p>` : ""}<div class="src">${item.source || ""}</div></article>`;
     }
 
     async function search() {
       const query = q.value.trim();
       if (!query) { meta.textContent = "Escribe una búsqueda."; return; }
       meta.textContent = "Buscando...";
-      results.innerHTML = "";
+      Object.values(panes).forEach(el => el.innerHTML = "");
       const bookQ = /comic|cómic|manga|historieta|batman|marvel|dc|spiderman|webtoon/i.test(query) ? query + " comic" : query;
       const settled = await Promise.allSettled([
-        wiki(query, "es"),
-        wiki(query, "en"),
-        openLibrary(bookQ),
-        wikiImages(query, "es"),
-        wikiImages(query, "en"),
+        wiki(query, "es"), wiki(query, "en"), openLibrary(bookQ),
+        wikiImages(query, "es"), wikiImages(query, "en"), commonsImages(query),
+        sepias(query), commonsImages(query + " filetype:video"),
       ]);
       const val = (i) => settled[i].status === "fulfilled" ? settled[i].value : [];
       const web = [...val(0), ...val(2), ...val(1)];
-      const images = [...val(2).filter((x) => x.image).map((x) => ({...x, url: x.url})), ...val(3), ...val(4)];
+      const images = [...val(2).filter(x => x.image), ...val(3), ...val(4), ...val(5).filter(x => !x.video)];
+      const videos = [
+        { title: "Ver en YouTube: " + query, url: "https://www.youtube.com/results?search_query=" + encodeURIComponent(query), description: "Abre resultados de video en YouTube", source: "YouTube" },
+        ...val(6),
+        ...val(7).filter(x => x.video || /\.(webm|ogv|mp4)$/i.test(x.url || "")),
+      ];
       const providers = [];
       if (val(0).length || val(1).length) providers.push("wikipedia");
       if (val(2).length) providers.push("openlibrary");
-      meta.textContent = "Proveedor: " + (providers.join("+") || "ninguno") + " · " + web.length + " resultados";
-      let html = web.length ? web.map(card).join("") : `<div class="err">No hay resultados.</div>`;
-      if (images.length) {
-        html += `<h3>Imágenes</h3><div class="grid">` + images.slice(0, 8).map((img) =>
-          `<a class="thumb" href="${img.url}" target="_blank" rel="noopener"><img src="${img.image || img.url}" alt=""><span>${img.title || ""}</span></a>`
-        ).join("") + `</div>`;
-      }
-      results.innerHTML = html;
+      if (val(5).length) providers.push("commons");
+      if (val(6).length) providers.push("peertube");
+      meta.textContent = `Proveedor: ${providers.join("+") || "ninguno"} · ${web.length} web · ${images.length} imgs · ${videos.length} videos`;
+
+      panes.web.innerHTML = web.length ? web.map(card).join("") : `<div class="err">Sin resultados web.</div>`;
+      panes.images.innerHTML = images.length ? `<div class="grid">` + images.slice(0, 16).map(img =>
+        `<a class="thumb" href="${img.url}" target="_blank" rel="noopener"><img src="${img.image}" alt=""><span>${img.title || ""}</span></a>`
+      ).join("") + `</div>` : `<div class="err">Sin imágenes.</div>`;
+      panes.videos.innerHTML = videos.length ? videos.slice(0, 16).map(v => {
+        const media = v.video
+          ? `<video src="${v.video}" poster="${v.image || ""}" controls preload="metadata"></video>`
+          : (v.image ? `<img src="${v.image}" alt="">` : "");
+        return `<a class="thumb" style="display:block;margin-bottom:10px" href="${v.url}" target="_blank" rel="noopener">${media}<span>${v.title}</span></a>`;
+      }).join("") : `<div class="err">Sin videos.</div>`;
     }
 
     go.onclick = search;
     q.onkeydown = (e) => { if (e.key === "Enter") search(); };
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById("installBar").style.display = "flex";
+    });
+    document.getElementById("installBtn").onclick = async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      document.getElementById("installBar").style.display = "none";
+      deferredPrompt = null;
+    };
+
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
     search();
   </script>
 </body>
