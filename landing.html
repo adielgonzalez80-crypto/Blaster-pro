@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Blaster Pro — $6 · MEDIAMAX</title>
-  <meta name="description" content="Blaster Pro busca cómics, imágenes y videos. Pago único de $6." />
+  <title>MEDIAMAX — Blaster Pro $6 · Rivales $3</title>
+  <meta name="description" content="Blaster Pro $6 y Rivales: Puño de Hierro $3. Creado por Adiel González, para MEDIAMAX Videojuegos. Pago con PayPal." />
   <meta name="theme-color" content="#070b14" />
   <link rel="icon" href="./icon-192.png" />
   <style>
@@ -24,6 +24,7 @@
     .btn-blue { background:var(--blue); color:#fff; }
     .btn-wa { background:#1ebe57; color:#06210f; }
     .btn-ghost { background:#18233a; color:#d7e2f7; border:1px solid var(--line); }
+    .btn-gold { background:var(--gold); color:#111; }
     .btn-lg { padding:15px 22px; font-size:16px; }
     .hero { padding:36px 0 20px; }
     .kicker { color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
@@ -41,21 +42,28 @@
     .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
     .card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; }
     .card p { margin:0; color:#c9d4ea; font-size:14px; }
+    .game { display:grid; grid-template-columns:140px 1fr; gap:16px; align-items:center; background:linear-gradient(180deg,#1a0c10,#121a2b); border:1px solid #4a2a22; border-radius:20px; padding:18px; }
+    .game img { width:140px; height:140px; object-fit:cover; border-radius:16px; background:#000; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border-radius:16px; overflow:hidden; }
+    td { border-top:1px solid var(--line); padding:10px 12px; font-size:14px; }
+    td:first-child { color:var(--muted); width:34%; }
     .cta { text-align:center; padding:36px 22px; background:#121a2b; border:1px solid var(--line); border-radius:24px; }
     footer { color:var(--muted); font-size:13px; padding:28px 0 40px; }
     footer a { color:#8cb4ff; }
+    @media(max-width:640px){ .game { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap nav">
       <a class="brand" href="#inicio">
-        <img src="./icon-192.png" alt="Blaster Pro" />
-        <div><strong>Blaster Pro</strong><span>MEDIAMAX Aplicaciones móviles</span></div>
+        <img src="./icon-192.png" alt="MEDIAMAX" />
+        <div><strong>MEDIAMAX</strong><span>Apps y videojuegos</span></div>
       </a>
       <div class="nav-actions">
-        <a class="btn btn-blue" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=mediamaxaplicacionesmoviles@gmail.com&item_name=Blaster%20Pro%20MEDIAMAX&amount=6.00&currency_code=USD&no_shipping=1">Pagar $6 con PayPal</a>
-        <a class="btn btn-wa" href="https://wa.me/18299860705?text=Hola%2C%20quiero%20comprar%20Blaster%20Pro%20por%20%246">WhatsApp</a>
+        <a class="btn btn-blue" href="#inicio">Blaster Pro $6</a>
+        <a class="btn btn-gold" href="#juegos">Juegos $3</a>
+        <a class="btn btn-wa" href="https://wa.me/18299860705?text=Hola%2C%20quiero%20info%20MEDIAMAX">WhatsApp</a>
       </div>
     </div>
   </header>
@@ -84,17 +92,47 @@
         <article class="card"><h3>Sin mensualidad</h3><p>Un solo pago de $6. Hecha en RD por MEDIAMAX.</p></article>
       </div>
     </section>
+
+    <section id="juegos">
+      <div class="kicker">MEDIAMAX Videojuegos</div>
+      <h2>Área de juegos</h2>
+      <p class="lead">Prueba el demo y, si te gusta, compra la APK. Pago único con PayPal.</p>
+      <img src="./logo-rivales.jpg" alt="Logo Rivales Puño de Hierro" style="display:block;max-width:280px;width:60%;margin:0 auto 16px;border-radius:16px"/>
+      <div class="game">
+        <img src="./logo-rivales.jpg" alt="Rivales Puño de Hierro" />
+        <div>
+          <h3 style="margin:0 0 6px;font-size:26px">Rivales: Puño de Hierro</h3>
+          <p style="margin:0 0 8px;color:#c9d4ea">Pelea 1 vs CPU. Gols, Max el Hacha, Puño de Acero, Mara Coil, Nyx Vale, Brant Cole y Sable Quill.</p>
+          <p style="margin:0 0 12px;color:var(--gold);font-size:13px">Licencia: Creado por Adiel González, para MEDIAMAX Videojuegos.</p>
+          <div class="price" style="margin-bottom:12px"><b>$3.00 USD</b><small>Pago único · APK Android</small></div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <a class="btn btn-gold" href="./demo-rivales.html">Ver demo</a>
+            <a class="btn btn-blue" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=mediamaxaplicacionesmoviles@gmail.com&item_name=Rivales%20Puno%20de%20Hierro%20MEDIAMAX&amount=3.00&currency_code=USD&no_shipping=1">Pagar $3 con PayPal</a>
+            <a class="btn btn-wa" href="https://wa.me/18299860705?text=Hola%2C%20quiero%20comprar%20Rivales%20Pu%C3%B1o%20de%20Hierro%20por%20%243">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <table style="margin-top:18px">
+        <tr><td>Producto</td><td>Rivales: Puño de Hierro</td></tr>
+        <tr><td>Licencia</td><td>Creado por Adiel González, para MEDIAMAX Videojuegos</td></tr>
+        <tr><td>Precio</td><td><b>$3.00 USD</b> pago único</td></tr>
+        <tr><td>Demo</td><td><a href="./demo-rivales.html" style="color:#8cb4ff">Jugar demo</a> (luego compras la APK)</td></tr>
+        <tr><td>Plataforma</td><td>Android 7 o superior · entrega de APK al pagar</td></tr>
+        <tr><td>Soporte</td><td>WhatsApp 829-986-0705</td></tr>
+      </table>
+    </section>
+
     <section>
       <div class="cta">
         <div class="kicker">Listo para instalar</div>
-        <h2>Blaster Pro por $6</h2>
-        <p class="lead" style="margin:0 auto 18px">PayPal o tarjeta. Cobra mediamaxaplicacionesmoviles@gmail.com</p>
-        <a class="btn btn-blue btn-lg" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=mediamaxaplicacionesmoviles@gmail.com&item_name=Blaster%20Pro%20MEDIAMAX&amount=6.00&currency_code=USD&no_shipping=1">Pagar $6 con PayPal</a>
+        <h2>Blaster Pro $6 · Rivales $3</h2>
+        <p class="lead" style="margin:0 auto 18px">PayPal cobra mediamaxaplicacionesmoviles@gmail.com</p>
+        <a class="btn btn-blue btn-lg" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=mediamaxaplicacionesmoviles@gmail.com&item_name=Blaster%20Pro%20MEDIAMAX&amount=6.00&currency_code=USD&no_shipping=1">Pagar Blaster Pro $6</a>
       </div>
     </section>
     <footer>
-      <p>Blaster Pro · MEDIAMAX Aplicaciones móviles · © 2026</p>
-      <p><a href="./ficha-blaster-pro.pdf">Ficha PDF</a> · <a href="https://adielgonzalez80-crypto.github.io/Blaster-pro/">Demo</a></p>
+      <p>Creado por Adiel González, para MEDIAMAX Videojuegos · MEDIAMAX Aplicaciones móviles · © 2026</p>
+      <p><a href="./ficha-blaster-pro.pdf">Ficha PDF Blaster Pro</a> · <a href="https://adielgonzalez80-crypto.github.io/Blaster-pro/">Demo Blaster Pro</a> · <a href="./demo-rivales.html">Demo Rivales</a></p>
     </footer>
   </main>
 </body>
