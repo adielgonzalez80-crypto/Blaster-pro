@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BlasterPRO | Mensajería omnicanal para ASEAN — blaster-pro.com</title>
+  <meta name="description" content="BlasterPRO es la infraestructura web de campañas en WhatsApp, Telegram, LINE y Zalo. Panel en la nube, créditos sin caducidad y reportes en 48 horas. blaster-pro.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070b14;
+      --bg-2: #0d1424;
+      --card: #111a2e;
+      --line: rgba(255,255,255,.08);
+      --text: #e8eefc;
+      --muted: #9aa8c7;
+      --green: #25d366;
+      --green-2: #128c7e;
+      --cyan: #3ee0c6;
+      --gold: #f4c14a;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    .nav {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(16px);
+      background: rgba(7,11,20,.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; gap: 16px;
+    }
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700; letter-spacing: -.03em; font-size: 1.15rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(145deg, var(--green), var(--cyan));
+      display: grid; place-items: center; color: #052016; font-weight: 800;
+    }
+    .nav-links { display: flex; gap: 22px; color: var(--muted); font-size: .92rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 999px; padding: 12px 18px; font-weight: 600; font-size: .95rem;
+      border: 1px solid transparent; cursor: pointer;
+    }
+    .btn-green { background: var(--green); color: #052016; }
+    .btn-ghost { border-color: var(--line); color: var(--text); background: transparent; }
+    .hero {
+      padding: 72px 0 40px;
+      background:
+        radial-gradient(900px 420px at 80% -10%, rgba(37,211,102,.18), transparent 60%),
+        radial-gradient(700px 380px at 0% 20%, rgba(62,224,198,.12), transparent 55%);
+    }
+    .kicker {
+      color: var(--cyan); font-weight: 600; font-size: .82rem;
+      letter-spacing: .12em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.1rem, 5vw, 4rem);
+      line-height: 1.05; letter-spacing: -.04em; max-width: 16ch;
+    }
+    .lead { margin-top: 18px; color: var(--muted); max-width: 58ch; font-size: 1.08rem; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .domain {
+      margin-top: 18px; color: var(--muted); font-size: .92rem;
+    }
+    .domain b { color: var(--text); }
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin: 48px 0 10px;
+    }
+    .stat {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 18px 16px;
+    }
+    .stat b { display: block; font-size: 1.35rem; font-family: "Space Grotesk", sans-serif; }
+    .stat span { color: var(--muted); font-size: .85rem; }
+    section { padding: 72px 0; }
+    h2 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      letter-spacing: -.03em; margin-bottom: 10px;
+    }
+    .sub { color: var(--muted); max-width: 62ch; margin-bottom: 32px; }
+    .grid-4, .grid-3, .grid-2 { display: grid; gap: 16px; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: var(--radius); padding: 22px;
+    }
+    .card h3 { font-size: 1.05rem; margin: 10px 0 8px; }
+    .card p { color: var(--muted); font-size: .94rem; }
+    .ico {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: grid; place-items: center; font-size: 1.2rem;
+      background: rgba(37,211,102,.12);
+    }
+    .steps { counter-reset: s; }
+    .step { position: relative; padding-left: 0; }
+    .num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--green), var(--cyan));
+      color: #052016; font-weight: 800; display: grid; place-items: center;
+      margin-bottom: 12px;
+    }
+    .price {
+      display: flex; align-items: flex-end; gap: 8px; margin: 8px 0 14px;
+    }
+    .price strong { font-size: 2.2rem; font-family: "Space Grotesk", sans-serif; }
+    .faq details {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 14px; padding: 16px 18px; margin-bottom: 10px;
+    }
+    .faq summary { cursor: pointer; font-weight: 600; }
+    .faq p { color: var(--muted); margin-top: 8px; }
+    .cta-band {
+      background: linear-gradient(135deg, #10261c, #0d1424 55%);
+      border: 1px solid rgba(37,211,102,.25);
+      border-radius: 28px; padding: 40px 32px; text-align: center;
+    }
+    footer {
+      border-top: 1px solid var(--line); padding: 28px 0 40px;
+      color: var(--muted); font-size: .86rem;
+    }
+    .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .note {
+      margin-top: 18px; font-size: .82rem; color: #7f8eab;
+      max-width: 80ch;
+    }
+    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .plan {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 22px; padding: 24px; display: flex; flex-direction: column;
+    }
+    .plan.featured {
+      border-color: rgba(37,211,102,.45);
+      box-shadow: 0 0 0 1px rgba(37,211,102,.15), 0 20px 50px rgba(0,0,0,.25);
+    }
+    .plan ul { color: var(--muted); font-size: .92rem; margin: 12px 0 20px; padding-left: 18px; flex: 1; }
+    .plan li { margin: 8px 0; }
+    .brands { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 16px; }
+    .brand-pill {
+      background: #fff; color: #111; font-size: .72rem; font-weight: 800;
+      letter-spacing: .04em; padding: 5px 8px; border-radius: 6px;
+    }
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,.65);
+      display: none; align-items: center; justify-content: center;
+      z-index: 80; padding: 16px;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      width: min(520px, 100%); background: #0f1728; border: 1px solid var(--line);
+      border-radius: 20px; padding: 22px; max-height: 92vh; overflow: auto;
+    }
+    label { display: block; font-size: .82rem; color: var(--muted); margin: 12px 0 6px; }
+    input, select {
+      width: 100%; background: #0a1220; border: 1px solid var(--line);
+      color: var(--text); border-radius: 12px; padding: 12px 12px; font: inherit;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .pay-msg { margin-top: 12px; font-size: .88rem; color: var(--muted); }
+    .pay-msg.ok { color: var(--green); }
+    .pay-msg.err { color: #ff8b8b; }
+    .lock { font-size: .8rem; color: var(--muted); margin-top: 10px; }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .stats, .grid-4, .grid-3, .grid-2, .plans { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="logo" href="https://www.blaster-pro.com/">
+        <span class="mark">B</span>
+        BlasterPRO
+      </a>
+      <nav class="nav-links">
+        <a href="#canales">Canales</a>
+        <a href="#pasos">Cómo funciona</a>
+        <a href="#precios">Pagar</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-green" id="navWa" href="#precios">WhatsApp</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="kicker">blaster-pro.com</p>
+        <h1>Campañas omnicanal para ASEAN, desde un panel web.</h1>
+        <p class="lead">
+          Infraestructura en la nube para enviar campañas de marketing a clientes en
+          WhatsApp, Telegram, LINE y Zalo. Sin instalar software. Créditos que no caducan.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-green" href="#precios">Pagar con PayPal</a>
+          <a class="btn btn-ghost" href="https://www.blaster-pro.com/product">Ver planes oficiales</a>
+        </div>
+        <p class="domain">Sitio oficial: <b>www.blaster-pro.com</b></p>
+
+        <div class="stats">
+          <div class="stat"><b>4</b><span>Canales: WhatsApp, Telegram, LINE, Zalo</span></div>
+          <div class="stat"><b>95%</b><span>Tasa de entrega reportada</span></div>
+          <div class="stat"><b>RM80</b><span>Precio de entrada</span></div>
+          <div class="stat"><b>48 h</b><span>Reporte Excel de campaña</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="canales">
+      <div class="wrap">
+        <h2>Un ecosistema para el Sudeste Asiático</h2>
+        <p class="sub">Elige el canal según el mercado. El panel es el mismo; cambia el destino de la campaña.</p>
+        <div class="grid-4">
+          <article class="card">
+            <div class="ico">🟢</div>
+            <h3>WhatsApp</h3>
+            <p>Canal principal en ASEAN. Texto, imagen, video o PDF. Programación y reembolso si no se entrega.</p>
+            <p style="margin-top:12px"><a href="https://www.blaster-pro.com/whatsappblaster">Más en blaster-pro.com →</a></p>
+          </article>
+          <article class="card">
+            <div class="ico">💙</div>
+            <h3>Zalo</h3>
+            <p>Acceso al mercado de Vietnam: lanzamientos, avisos y promociones a usuarios activos de Zalo.</p>
+            <p style="margin-top:12px"><a href="https://www.blaster-pro.com/zaloblaster">Más en blaster-pro.com →</a></p>
+          </article>
+          <article class="card">
+            <div class="ico">✈️</div>
+            <h3>Telegram</h3>
+            <p>Comunidades y embudos. Plan Premium desde USD 120 / 5.000 créditos según la tienda oficial.</p>
+            <p style="margin-top:12px"><a href="https://www.blaster-pro.com/telegramblaster">Más en blaster-pro.com →</a></p>
+          </article>
+          <article class="card">
+            <div class="ico">💚</div>
+            <h3>LINE</h3>
+            <p>Penetración en Tailandia y Taiwán con el mismo modelo de créditos y panel web.</p>
+            <p style="margin-top:12px"><a href="https://www.blaster-pro.com/lineblaster">Más en blaster-pro.com →</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pasos" style="background: var(--bg-2);">
+      <div class="wrap">
+        <h2>Lanza una campaña en 3 pasos</h2>
+        <p class="sub">Arquitectura 100% web. No descargas escritorio ni gestionas IPs locales.</p>
+        <div class="grid-3 steps">
+          <article class="card step">
+            <div class="num">1</div>
+            <h3>Elige canal y créditos</h3>
+            <p>WhatsApp, Telegram, LINE o Zalo. Los créditos no tienen fecha de caducidad.</p>
+          </article>
+          <article class="card step">
+            <div class="num">2</div>
+            <h3>Sube la base y el contenido</h3>
+            <p>Panel seguro, convertidor automático de código de país (601, 65, 62…) y payload multimedia.</p>
+          </article>
+          <article class="card step">
+            <div class="num">3</div>
+            <h3>Despliega y mide</h3>
+            <p>Enrutado en la nube, programación por zona horaria y reporte Excel a las 48 horas.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>Capacidades de la plataforma</h2>
+        <div class="grid-2">
+          <article class="card"><h3>Multimedia</h3><p>Texto hasta 5.000 caracteres, o texto + JPEG / MP4 / PDF por 1 crédito.</p></article>
+          <article class="card"><h3>Automatización</h3><p>Programación de campañas y respuestas para seguimiento comercial.</p></article>
+          <article class="card"><h3>Analítica</h3><p>Extracción de métricas de entrega a las 48 horas para calcular ROI.</p></article>
+          <article class="card"><h3>Reseller / white-label</h3><p>Paneles para revendedores que quieren operar con su propia marca.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="precios" style="background: var(--bg-2);">
+      <div class="wrap">
+        <h2>Paga con tarjeta de crédito o débito</h2>
+        <p class="sub">Visa, Mastercard, American Express y tarjetas de débito. El cargo se procesa cifrado. Elige un plan y completa el pago.</p>
+        <div class="brands">
+          <span class="brand-pill">PayPal</span>
+          <span class="brand-pill">VISA</span>
+          <span class="brand-pill">Mastercard</span>
+          <span class="brand-pill">AMEX</span>
+          <span class="brand-pill">Débito</span>
+        </div>
+        <div class="plans">
+          <article class="plan">
+            <p class="kicker">Starter</p>
+            <div class="price"><strong>USD 20</strong><span>pago único · PayPal</span></div>
+            <ul>
+              <li>Créditos de arranque</li>
+              <li>Panel web</li>
+              <li>Sin caducidad</li>
+            </ul>
+            <button class="btn btn-green" type="button" onclick="openPay('Starter','USD 20',20,'USD')">Pagar con PayPal</button>
+          </article>
+          <article class="plan featured">
+            <p class="kicker">Growth</p>
+            <div class="price"><strong>USD 60</strong><span>recomendado · PayPal</span></div>
+            <ul>
+              <li>Más créditos para campañas</li>
+              <li>Multimedia e informes 48 h</li>
+              <li>Soporte por WhatsApp</li>
+            </ul>
+            <button class="btn btn-green" type="button" onclick="openPay('Growth','USD 60',60,'USD')">Pagar con PayPal</button>
+          </article>
+          <article class="plan">
+            <p class="kicker">Telegram Premium</p>
+            <div class="price"><strong>USD 120</strong><span>5.000 créditos</span></div>
+            <ul>
+              <li>Plan publicado en blaster-pro.com</li>
+              <li>Texto + media = 1 crédito</li>
+              <li>Panel web, sin caducidad</li>
+            </ul>
+            <button class="btn btn-green" type="button" onclick="openPay('Telegram Premium','USD 120',120,'USD')">Pagar con PayPal</button>
+          </article>
+        </div>
+        <p class="note">El pago sale por PayPal (saldo PayPal o tarjeta de crédito/débito). El dinero entra en tu cuenta PayPal y de ahí lo retiras a tu banco. Cada compra avisa a tu WhatsApp.</p>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="wrap">
+        <h2>Preguntas frecuentes</h2>
+        <details open>
+          <summary>¿En qué se diferencia de un programa de escritorio?</summary>
+          <p>BlasterPRO es un panel web. Compras créditos, subes la lista y envías desde la nube, sin instalar software local.</p>
+        </details>
+        <details>
+          <summary>¿Los créditos caducan?</summary>
+          <p>No. El sitio oficial indica que el pool de créditos no tiene fecha de vencimiento y que hay reembolso si el mensaje no se entrega.</p>
+        </details>
+        <details>
+          <summary>¿Hay opción reseller?</summary>
+          <p>Sí. La plataforma se presenta como lista para paneles de revendedor y marca blanca.</p>
+        </details>
+        <details>
+          <summary>¿Puedo enviar a cualquier número?</summary>
+          <p>No es recomendable ni, en muchos países, legal. Debes usar contactos que hayan dado consentimiento y respetar las políticas de cada aplicación. Esta landing no enseña a evadir bloqueos ni a hacer spam.</p>
+        </details>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="cta-band">
+          <h2>Activa tu cuenta en BlasterPRO</h2>
+          <p class="sub" style="margin:12px auto 22px">Paga con PayPal o tarjeta. Soporte por tu WhatsApp. Sitio: blaster-pro.com</p>
+          <a class="btn btn-green" href="#precios">Pagar con PayPal</a>
+          <a class="btn btn-ghost" id="ctaWa" href="#">Escribir por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-bg" id="payModal" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <div class="modal">
+      <h2 id="payTitle" style="font-size:1.35rem">Pagar con PayPal</h2>
+      <p class="sub" id="paySummary" style="margin-bottom:8px">PayPal, tarjeta de crédito o débito. El dinero llega a tu cuenta PayPal.</p>
+      <form id="payForm">
+        <label for="fullName">Nombre</label>
+        <input id="fullName" name="name" required placeholder="Tu nombre" />
+        <label for="email">Correo</label>
+        <input id="email" name="email" type="email" required placeholder="ivan.p@example.net" />
+        <p class="lock">PayPal muestra en el siguiente paso “PayPal” o “Débito o crédito”. No pegas el número de tarjeta en esta web.</p>
+        <div class="hero-cta" style="margin-top:16px">
+          <button class="btn btn-green" type="submit" id="payBtn">Ir a PayPal</button>
+          <button class="btn btn-ghost" type="button" onclick="closePay()">Cancelar</button>
+        </div>
+        <p class="pay-msg" id="payMsg"></p>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap foot">
+      <div>© 2026 BlasterPRO · <a href="https://www.blaster-pro.com/">blaster-pro.com</a></div>
+      <div>Landing de presentación. No sustituye el sitio oficial.</div>
+    </div>
+    <div class="wrap note">
+      Aviso: el envío masivo no solicitado viola las condiciones de WhatsApp, Telegram, LINE y Zalo y puede ser ilegal. Usa la plataforma solo con destinatarios opt-in y para comunicación comercial legítima.
+    </div>
+  </footer>
+  <script>
+    /* ========== TUS DATOS (edita solo este bloque) ==========
+       1) WhatsApp con código de país, sin + ni espacios.
+       2) paypalEmail = el correo de TU cuenta PayPal Business.
+          En PayPal: Cartera → Vincular banco para retirar a tu cuenta.
+       3) Opcional: paypalMe = https://www.paypal.me/TuUsuario
+    */
+    const CONFIG = {
+      siteName: 'BlasterPRO',
+      domain: 'https://www.blaster-pro.com',
+      whatsapp: '18299860705',
+      /* Correo de TU cuenta PayPal (Business). Ahí entra el dinero. */
+      paypalEmail: 'TU-CORREO-PAYPAL@email.com',
+      /* Opcional: https://www.paypal.me/TuUsuario */
+      paypalMe: ''
+    };
+
+    function waUrl(text) {
+      return 'https://api.whatsapp.com/send?phone=' + CONFIG.whatsapp + '&text=' + encodeURIComponent(text || 'Hola, quiero información de BlasterPRO');
+    }
+    function bindWhatsApp() {
+      document.getElementById('navWa').href = waUrl('Hola, vengo de blaster-pro.com');
+      document.getElementById('ctaWa').href = waUrl('Hola, quiero una cuenta en BlasterPRO');
+    }
+    bindWhatsApp();
+
+    let currentPlan = { name: 'Starter', label: 'RM 80', amount: 80, currency: 'MYR' };
+
+    function openPay(name, label, amount, currency) {
+      currentPlan = { name, label, amount, currency };
+      document.getElementById('paySummary').textContent = name + ' · ' + label + ' · PayPal o tarjeta';
+      document.getElementById('payMsg').textContent = '';
+      document.getElementById('payModal').classList.add('open');
+    }
+    function closePay() {
+      document.getElementById('payModal').classList.remove('open');
+    }
+    document.getElementById('payModal').addEventListener('click', function (e) {
+      if (e.target.id === 'payModal') closePay();
+    });
+
+    function paypalCheckoutUrl(plan, buyerName, buyerEmail) {
+      if (CONFIG.paypalMe) {
+        return CONFIG.paypalMe.replace(/\/$/, '') + '/' + plan.amount + plan.currency;
+      }
+      const p = new URLSearchParams({
+        cmd: '_xclick',
+        business: CONFIG.paypalEmail,
+        item_name: 'BlasterPRO ' + plan.name,
+        amount: String(plan.amount),
+        currency_code: plan.currency,
+        no_shipping: '1',
+        rm: '1',
+        custom: buyerEmail,
+        return: CONFIG.domain,
+        cancel_return: CONFIG.domain
+      });
+      return 'https://www.paypal.com/cgi-bin/webscr?' + p.toString();
+    }
+
+    document.getElementById('payForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const msg = document.getElementById('payMsg');
+      const email = document.getElementById('email').value.trim();
+      const name = document.getElementById('fullName').value.trim();
+      if (!name || !email) {
+        msg.className = 'pay-msg err';
+        msg.textContent = 'Escribe nombre y correo.';
+        return;
+      }
+      if (!CONFIG.paypalEmail || CONFIG.paypalEmail.indexOf('TU-CORREO') !== -1) {
+        msg.className = 'pay-msg err';
+        msg.textContent = 'Falta tu correo de PayPal en CONFIG.paypalEmail.';
+        return;
+      }
+
+      const orderText = 'Nuevo pedido BlasterPRO (PayPal)\nPlan: ' + currentPlan.name +
+        ' (' + currentPlan.label + ')\nCliente: ' + name + '\nCorreo: ' + email;
+      window.open(waUrl(orderText), '_blank');
+
+      msg.className = 'pay-msg ok';
+      msg.textContent = 'Abriendo PayPal. El cliente puede pagar con saldo PayPal o con tarjeta.';
+      setTimeout(function () {
+        window.location.href = paypalCheckoutUrl(currentPlan, name, email);
+      }, 500);
+    });
+  </script>
+</body>
+</html>
