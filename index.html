@@ -41,6 +41,8 @@
     .nav { position:fixed; left:0; right:0; bottom:0; display:flex; background:#10182a; border-top:1px solid var(--line); padding:6px 8px calc(8px + env(safe-area-inset-bottom)); }
     .nav button { flex:1; background:transparent; color:var(--muted); padding:8px 4px; font-size:11px; border-radius:10px; }
     .nav button.on { color:#fff; background:#1a2740; }
+    footer.about { color:#c9d4ea; font-size:14px; line-height:1.5; }
+    footer.about a { color:#8cb4ff; }
   </style>
 </head>
 <body>
@@ -69,17 +71,27 @@
     <section id="web"></section>
     <section id="images" class="hidden"></section>
     <section id="videos" class="hidden"></section>
+    <section id="about" class="hidden">
+      <footer class="about card">
+        <strong>Blaster Pro</strong>
+        <p>Creada por <b>Adiel González</b> para <b>MEDIAMAX Aplicaciones móviles</b>.</p>
+        <p>© 2026 Adiel González · MEDIAMAX Aplicaciones móviles.</p>
+        <p>Logo, nombre y marca pertenecen a sus titulares. Los resultados de búsqueda provienen de Wikipedia, Open Library, Wikimedia y PeerTube.</p>
+        <p><a href="./LICENSE">Ver licencia</a> · <a href="https://github.com/adielgonzalez80-crypto/Blaster-pro">Código en GitHub</a></p>
+      </footer>
+    </section>
   </main>
   <nav class="nav">
     <button class="on" data-tab="web">Web</button>
     <button data-tab="images">Imágenes</button>
     <button data-tab="videos">Videos</button>
+    <button data-tab="about">Autor</button>
   </nav>
   <script>
     const q = document.getElementById("q");
     const go = document.getElementById("go");
     const meta = document.getElementById("meta");
-    const panes = { web: document.getElementById("web"), images: document.getElementById("images"), videos: document.getElementById("videos") };
+    const panes = { web: document.getElementById("web"), images: document.getElementById("images"), videos: document.getElementById("videos"), about: document.getElementById("about") };
     let deferredPrompt = null;
 
     function strip(s) {
