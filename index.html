@@ -5,95 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Blaster Pro</title>
   <style>
-    :root {
-      --bg: #0b1220;
-      --card: #121a2b;
-      --line: #243049;
-      --text: #e8eefc;
-      --muted: #93a0b8;
-      --accent: #3b82f6;
-    }
+    :root { --bg:#0b1220; --card:#121a2b; --line:#243049; --text:#e8eefc; --muted:#93a0b8; --accent:#3b82f6; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, Segoe UI, Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-    }
-    header {
-      padding: 18px 16px 8px;
-    }
-    h1 { margin: 0; font-size: 22px; letter-spacing: .2px; }
-    .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
-    .search {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px 8px;
-      position: sticky;
-      top: 0;
-      background: color-mix(in srgb, var(--bg) 92%, transparent);
-      backdrop-filter: blur(8px);
-    }
-    input {
-      flex: 1;
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 16px;
-      background: #edf2ff;
-      color: #0b1220;
-      font-size: 16px;
-      outline: none;
-    }
-    button {
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 18px;
-      background: var(--accent);
-      color: white;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; cursor: wait; }
-    main { padding: 8px 16px 40px; }
-    .meta { color: var(--muted); font-size: 13px; margin: 8px 0 14px; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-    .card a {
-      color: #8cb4ff;
-      font-weight: 700;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .card p { margin: 8px 0 0; color: #c9d4ea; font-size: 14px; line-height: 1.45; }
-    .src { margin-top: 8px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .thumb {
-      background: #0e1626;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .thumb img { width: 100%; height: 160px; object-fit: cover; display: block; }
-    .thumb span { display: block; padding: 8px; font-size: 12px; color: #d5def0; }
-    .empty { color: var(--muted); padding: 24px 8px; }
-    .err { color: #fecaca; }
+    body { margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; }
+    header { padding:18px 16px 8px; }
+    h1 { margin:0; font-size:22px; }
+    .sub { color:var(--muted); font-size:13px; margin-top:4px; }
+    .search { display:flex; gap:8px; padding:12px 16px; position:sticky; top:0; background:#0b1220f2; }
+    input { flex:1; border:0; border-radius:999px; padding:12px 16px; background:#edf2ff; color:#0b1220; font-size:16px; }
+    button { border:0; border-radius:999px; padding:12px 18px; background:var(--accent); color:#fff; font-weight:700; }
+    main { padding:8px 16px 40px; }
+    .meta { color:var(--muted); font-size:13px; margin:8px 0 14px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:12px; }
+    .card a { color:#8cb4ff; font-weight:700; text-decoration:none; font-size:16px; }
+    .card p { margin:8px 0 0; color:#c9d4ea; font-size:14px; line-height:1.45; }
+    .src { margin-top:8px; font-size:11px; color:var(--muted); text-transform:uppercase; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .thumb { background:#0e1626; border:1px solid var(--line); border-radius:12px; overflow:hidden; color:#d5def0; text-decoration:none; }
+    .thumb img { width:100%; height:160px; object-fit:cover; display:block; }
+    .thumb span { display:block; padding:8px; font-size:12px; }
+    .err { color:#fecaca; }
   </style>
 </head>
 <body>
   <header>
     <h1>Blaster Pro</h1>
-    <div class="sub">Búsqueda real · Wikipedia + Open Library · sin clave de Brave</div>
+    <div class="sub">Gratis · Wikipedia + Open Library · sin Railway ni tarjeta</div>
   </header>
   <div class="search">
     <input id="q" value="Comics" placeholder="Buscar cómics, libros, temas..." />
@@ -109,58 +46,88 @@
     const meta = document.getElementById("meta");
     const results = document.getElementById("results");
 
+    function strip(s) {
+      return String(s || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+        .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+        .replace(/\s+/g, " ").trim();
+    }
+
+    async function wiki(query, lang) {
+      const url = `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=8&format=json&origin=*`;
+      const data = await fetch(url).then((r) => r.json());
+      return (data.query?.search || []).map((hit) => ({
+        title: hit.title,
+        url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(hit.title.replace(/ /g, "_"))}`,
+        description: strip(hit.snippet),
+        source: "Wikipedia " + lang.toUpperCase(),
+      }));
+    }
+
+    async function wikiImages(query, lang) {
+      const url = `https://${lang}.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=8&prop=pageimages&piprop=thumbnail&pithumbsize=400&format=json&origin=*`;
+      const data = await fetch(url).then((r) => r.json());
+      return Object.values(data.query?.pages || {})
+        .filter((p) => p.thumbnail?.source)
+        .map((p) => ({
+          title: p.title,
+          url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title.replace(/ /g, "_"))}`,
+          image: p.thumbnail.source,
+        }));
+    }
+
+    async function openLibrary(query) {
+      const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=10`;
+      const data = await fetch(url).then((r) => r.json());
+      return (data.docs || []).map((doc) => ({
+        title: doc.title || "Sin título",
+        url: doc.key ? "https://openlibrary.org" + doc.key : "#",
+        description: ((doc.author_name && doc.author_name[0]) || "Autor desconocido") + (doc.first_publish_year ? " · " + doc.first_publish_year : ""),
+        image: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : "",
+        source: "Open Library",
+      }));
+    }
+
     function card(item) {
-      const title = item.title || "Sin título";
-      const url = item.url || "#";
-      const desc = item.description || "";
-      const src = item.source || "";
       return `<article class="card">
-        <a href="${url}" target="_blank" rel="noopener">${title}</a>
-        ${desc ? `<p>${desc}</p>` : ""}
-        ${src ? `<div class="src">${src}</div>` : ""}
+        <a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>
+        ${item.description ? `<p>${item.description}</p>` : ""}
+        ${item.source ? `<div class="src">${item.source}</div>` : ""}
       </article>`;
     }
 
     async function search() {
       const query = q.value.trim();
-      if (!query) {
-        meta.textContent = "Escribe una búsqueda.";
-        return;
-      }
-      go.disabled = true;
+      if (!query) { meta.textContent = "Escribe una búsqueda."; return; }
       meta.textContent = "Buscando...";
       results.innerHTML = "";
-      try {
-        const res = await fetch("/api/search?q=" + encodeURIComponent(query));
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Error de búsqueda");
-
-        const web = Array.isArray(data.web) ? data.web : [];
-        const images = Array.isArray(data.images) ? data.images : [];
-        meta.textContent = `Proveedor: ${data.provider || "demo"} · ${web.length} resultados`;
-
-        let html = "";
-        if (web.length) html += web.map(card).join("");
-        else html += `<div class="empty">No hay resultados web.</div>`;
-
-        if (images.length) {
-          html += `<h3>Imágenes</h3><div class="grid">` +
-            images.slice(0, 8).map((img) => `
-              <a class="thumb" href="${img.url}" target="_blank" rel="noopener">
-                <img src="${img.image || img.url}" alt="${img.title || ""}" />
-                <span>${img.title || ""}</span>
-              </a>`).join("") + `</div>`;
-        }
-        results.innerHTML = html;
-      } catch (e) {
-        meta.innerHTML = `<span class="err">${e.message}</span>`;
-      } finally {
-        go.disabled = false;
+      const bookQ = /comic|cómic|manga|historieta|batman|marvel|dc|spiderman|webtoon/i.test(query) ? query + " comic" : query;
+      const settled = await Promise.allSettled([
+        wiki(query, "es"),
+        wiki(query, "en"),
+        openLibrary(bookQ),
+        wikiImages(query, "es"),
+        wikiImages(query, "en"),
+      ]);
+      const val = (i) => settled[i].status === "fulfilled" ? settled[i].value : [];
+      const web = [...val(0), ...val(2), ...val(1)];
+      const images = [...val(2).filter((x) => x.image).map((x) => ({...x, url: x.url})), ...val(3), ...val(4)];
+      const providers = [];
+      if (val(0).length || val(1).length) providers.push("wikipedia");
+      if (val(2).length) providers.push("openlibrary");
+      meta.textContent = "Proveedor: " + (providers.join("+") || "ninguno") + " · " + web.length + " resultados";
+      let html = web.length ? web.map(card).join("") : `<div class="err">No hay resultados.</div>`;
+      if (images.length) {
+        html += `<h3>Imágenes</h3><div class="grid">` + images.slice(0, 8).map((img) =>
+          `<a class="thumb" href="${img.url}" target="_blank" rel="noopener"><img src="${img.image || img.url}" alt=""><span>${img.title || ""}</span></a>`
+        ).join("") + `</div>`;
       }
+      results.innerHTML = html;
     }
 
-    go.addEventListener("click", search);
-    q.addEventListener("keydown", (e) => { if (e.key === "Enter") search(); });
+    go.onclick = search;
+    q.onkeydown = (e) => { if (e.key === "Enter") search(); };
     search();
   </script>
 </body>
